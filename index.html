@@ -43,43 +43,25 @@ SundayChart.prototype.setCanvas = function(){
 	
 	context.fillText(this.height, canvas.width, 10);
 	context.fillText("0", canvas.width, canvas.height);
-	//context.fill();
 };
 
 SundayChart.prototype.doDraw = function(field_value){
 	var context = this.context;
 	var temp = 0;
-	//var max = field_value;
 
 	// 데이터 체인지
 	for(var i=0; i<storage.length-1; i++){
 		storage[i] = storage[i+1];
-		
-		//if(max<storage[i]){
-		//	max = storage[i];
-		//}
 	}
 	storage[storage.length-1]=field_value;
 
-
-	
 	// 캔버스 지우기
 	context.clearRect(0,0,this.canvas.width,this.canvas.height);
 	this.setCanvas();
 	
 	context.strokeStyle = '#800000';
 	//데이터 그리기
-	//var range = Math.floor(this.height / max);
 	var range = this.canvas.height / this.height;
-
-	
-	//context.lineWidth = 1;
-	//context.strokeStyle = '#333';
-	//context.fillStyle = '#000000';
-	//context.font = 'italic 8pt sans-serif';
-	
-	//context.fill();
-	
 
 	context.beginPath();
 	for(var i=0; i<storage.length; i++){
@@ -88,9 +70,6 @@ SundayChart.prototype.doDraw = function(field_value){
 		context.lineTo(x,y);
 		context.stroke();
 	} 
-
-	
-	//this.context.fillRect(0, 0, this.canvas.width,this.canvas.height);
 };
 </script>
 </head>
@@ -104,7 +83,6 @@ var chart = new SundayChart(document.getElementById("loadChart"), 300, 5);
 function test(){
 	var value = Math.floor(Math.random() * 300) +1;
 	chart.doDraw(value);
-	//chart.setCanvas();
 }
 </script>
 <button onclick="javascript:test();"></button>
