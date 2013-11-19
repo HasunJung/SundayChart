@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Hasun Chart</title>
+<script type="text/javascript">
+
+var storage = new Array(60);
+
+var SundayChart = function(canvas_element, height, line){
+	this.canvas = canvas_element;
+	this.context = this.canvas.getContext('2d');
+	this.height = height;
+	this.line = line;
+	
+	this.setCanvas();
+}
+
+SundayChart.prototype.setCanvas = function(){
+	var context = this.context;
+	var canvas = this.canvas;
+	
+	var user_range = this.height / this.line; 
+	
+	var drawX = canvas.height - this.height;
+	drawX = drawX / this.line;
+	//alert((drawX+ user_range) + ", "+(this.canvas.height / 6));
+
+	var x = 0;
+	var y = user_range + drawX;
+
+	for(var i=0; i<this.line; i++){
+		context.beginPath();
+		context.strokeStyle = '#4169e1';
+		context.moveTo(canvas.width, y);
+		context.lineTo(x ,y);
+
+		context.stroke(); 	
+		y = y + (user_range + drawX); 
+	} 
+	
+	context.textAlign = "right";
+	
+	context.fillText(this.height, canvas.width, 10);
+	context.fillText("0", canvas.width, canvas.height);
+	//context.fill();
+};
+
+SundayChart.prototype.doDraw = function(field_value){
+	var context = this.context;
+	var temp = 0;
+	//var max = field_value;
+
+	// 데이터 체인지
+	for(var i=0; i<storage.length-1; i++){
+		storage[i] = storage[i+1];
+		
+		//if(max<storage[i]){
+		//	max = storage[i];
+		//}
+	}
+	storage[storage.length-1]=field_value;
+
+
+	
+	// 캔버스 지우기
+	context.clearRect(0,0,this.canvas.width,this.canvas.height);
+	this.setCanvas();
+	
+	context.strokeStyle = '#800000';
+	//데이터 그리기
+	//var range = Math.floor(this.height / max);
+	var range = this.canvas.height / this.height;
+
+	
+	//context.lineWidth = 1;
+	//context.strokeStyle = '#333';
+	//context.fillStyle = '#000000';
+	//context.font = 'italic 8pt sans-serif';
+	
+	//context.fill();
+	
+
+	context.beginPath();
+	for(var i=0; i<storage.length; i++){
+		var x = (i+1)*10;
+		var y = (this.height - storage[i]) * range;
+		context.lineTo(x,y);
+		context.stroke();
+	} 
+
+	
+	//this.context.fillRect(0, 0, this.canvas.width,this.canvas.height);
+};
+</script>
+</head>
+<body>
+
+<canvas id="loadChart" width="600" height="400" style="border:1px solid"></canvas>
+
+<script type="text/javascript">
+var chart = new SundayChart(document.getElementById("loadChart"), 300, 5);
+
+function test(){
+	var value = Math.floor(Math.random() * 300) +1;
+	chart.doDraw(value);
+	//chart.setCanvas();
+}
+</script>
+<button onclick="javascript:test();"></button>
+
+</body>
+</html>
